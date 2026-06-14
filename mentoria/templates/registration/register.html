@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация - Mentoria Hub{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+    }
+    .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+        <div class="text-center mb-8">
+            <div class="btn-gradient text-white w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-user-plus text-2xl"></i>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900">Регистрация</h1>
+            <p class="text-gray-600 mt-2">Создайте свой аккаунт в Mentoria Hub</p>
+        </div>
+
+        {% if form.non_field_errors %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div>
+                <label for="id_username" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Имя пользователя
+                </label>
+                <input type="text" name="username" id="id_username" class="form-input" placeholder="Ваше имя пользователя" required>
+                {% if form.username.errors %}
+                    <p class="text-red-600 text-sm mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label for="id_email" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Email
+                </label>
+                <input type="email" name="email" id="id_email" class="form-input" placeholder="Ваш email" required>
+                {% if form.email.errors %}
+                    <p class="text-red-600 text-sm mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label for="id_password1" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Пароль
+                </label>
+                <input type="password" name="password1" id="id_password1" class="form-input" placeholder="Минимум 8 символов" required>
+                {% if form.password1.errors %}
+                    <p class="text-red-600 text-sm mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ form.password1.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Password Confirmation -->
+            <div>
+                <label for="id_password2" class="block text-sm font-semibold text-gray-700 mb-2">
+                    Подтверждение пароля
+                </label>
+                <input type="password" name="password2" id="id_password2" class="form-input" placeholder="Повторите пароль" required>
+                {% if form.password2.errors %}
+                    <p class="text-red-600 text-sm mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ form.password2.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-gradient text-white w-full py-3 rounded-lg font-semibold transition mt-6">
+                <i class="fas fa-check mr-2"></i>Создать Аккаунт
+            </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="text-center mt-6">
+            <p class="text-gray-600">
+                Уже есть аккаунт?
+                <a href="{% url 'login' %}" class="text-purple-600 font-semibold hover:text-purple-700">
+                    Войти
+                </a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

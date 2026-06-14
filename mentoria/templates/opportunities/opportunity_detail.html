@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}{{ opportunity.title }} - Mentoria Hub{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Breadcrumb -->
+        <div class="mb-8">
+            <a href="{% url 'opportunity_list' %}" class="text-purple-600 hover:text-purple-700 font-semibold">
+                <i class="fas fa-arrow-left mr-2"></i>Назад к возможностям
+            </a>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="inline-block px-4 py-2 text-sm font-bold text-white rounded-full
+                                {% if opportunity.category == 'OLYMPIAD' %}bg-green-500
+                                {% elif opportunity.category == 'HACKATHON' %}bg-blue-500
+                                {% elif opportunity.category == 'COMPETITION' %}bg-yellow-500
+                                {% elif opportunity.category == 'INTERNSHIP' %}bg-purple-500
+                                {% else %}bg-red-500{% endif %}">
+                                {{ opportunity.get_category_display }}
+                            </span>
+                        </div>
+
+                        <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ opportunity.title }}</h1>
+
+                        <!-- Meta Info -->
+                        <div class="grid grid-cols-2 gap-4 py-6 border-y border-gray-200">
+                            <div>
+                                <p class="text-sm text-gray-600">Срок подачи</p>
+                                <p class="text-lg font-bold text-gray-900 mt-1">
+                                    {{ opportunity.deadline|date:"d MMMM Y" }}
+                                </p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600">Дней осталось</p>
+                                <p class="text-lg font-bold text-purple-600 mt-1">
+                                    {{ opportunity.deadline|timeuntil }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+                            <i class="fas fa-file-alt text-purple-600 mr-2"></i>Описание
+                        </h2>
+                        <div class="text-gray-700 whitespace-pre-wrap leading-relaxed">
+                            {{ opportunity.description }}
+                        </div>
+                    </div>
+
+                    <!-- CTA Section -->
+                    <div class="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl p-8 text-white text-center">
+                        <h3 class="text-2xl font-bold mb-4">Готов принять вызов?</h3>
+                        <a href="{{ opportunity.apply_url }}" target="_blank" rel="noopener noreferrer" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 transition inline-block">
+                            <i class="fas fa-external-link-alt mr-2"></i>Перейти на сайт
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Save Button -->
+                {% if user.is_authenticated %}
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <form method="post" action="{% url 'save_opportunity' opportunity.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full btn-gradient text-white py-3 rounded-lg font-bold transition flex items-center justify-center">
+                                {% if is_saved %}
+                                    <i class="fas fa-bookmark mr-2"></i>Удалить из избранного
+                                {% else %}
+                                    <i class="far fa-bookmark mr-2"></i>Сохранить
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <p class="text-gray-600 text-sm mb-4">Войдите, чтобы сохранить возможность</p>
+                        <a href="{% url 'login' %}" class="block w-full btn-gradient text-white py-3 rounded-lg font-bold transition text-center">
+                            Войти
+                        </a>
+                    </div>
+                {% endif %}
+
+                <!-- Info Card -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">
+                        <i class="fas fa-info-circle text-purple-600 mr-2"></i>Информация
+                    </h3>
+
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <p class="text-gray-600">Тип</p>
+                            <p class="font-bold text-gray-900">{{ opportunity.get_category_display }}</p>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600">Срок</p>
+                            <p class="font-bold text-gray-900">{{ opportunity.deadline|date:"d.m.Y H:i" }}</p>
+                        </div>
+
+                        <div>
+                            <p class="text-gray-600">Дата добавления</p>
+                            <p class="font-bold text-gray-900">{{ opportunity.created_at|date:"d.m.Y" }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Apply Card -->
+                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+                    <h3 class="text-lg font-bold mb-4">
+                        <i class="fas fa-rocket mr-2"></i>Как Участвовать?
+                    </h3>
+
+                    <ol class="space-y-3 text-sm">
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-white bg-opacity-30 text-white mr-3 font-bold">1</span>
+                            <span>Прочитай описание</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-white bg-opacity-30 text-white mr-3 font-bold">2</span>
+                            <span>Подготовь материалы</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-white bg-opacity-30 text-white mr-3 font-bold">3</span>
+                            <span>Перейди на сайт</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-full bg-white bg-opacity-30 text-white mr-3 font-bold">4</span>
+                            <span>Отправь заявку</span>
+                        </li>
+                    </ol>
+
+                    <a href="{{ opportunity.apply_url }}" target="_blank" rel="noopener noreferrer" class="block w-full bg-white text-purple-600 py-2 rounded-lg font-bold hover:bg-gray-100 transition text-center mt-4">
+                        Участвовать
+                    </a>
+                </div>
+
+                <!-- Share Card -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">
+                        <i class="fas fa-share-alt text-purple-600 mr-2"></i>Поделиться
+                    </h3>
+
+                    <div class="flex gap-3">
+                        <button class="flex-1 bg-gray-900 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800 transition">
+                            <i class="fab fa-twitter mr-1"></i>
+                        </button>
+                        <button class="flex-1 bg-blue-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
+                            <i class="fab fa-facebook mr-1"></i>
+                        </button>
+                        <button class="flex-1 bg-red-600 text-white py-2 rounded-lg text-sm font-semibold hover:bg-red-700 transition">
+                            <i class="fas fa-link mr-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

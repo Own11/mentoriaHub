@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}{{ news.title }} - Mentoria Hub{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- Breadcrumb -->
+        <div class="mb-8">
+            <a href="{% url 'news_list' %}" class="text-purple-600 hover:text-purple-700 font-semibold">
+                <i class="fas fa-arrow-left mr-2"></i>Все новости
+            </a>
+        </div>
+
+        <!-- Article Content -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <!-- Featured Image -->
+            {% if news.image %}
+                <img src="{{ news.image.url }}" alt="{{ news.title }}" class="w-full h-96 object-cover">
+            {% else %}
+                <div class="w-full h-96 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                    <i class="fas fa-newspaper text-white text-6xl opacity-50"></i>
+                </div>
+            {% endif %}
+
+            <!-- Content -->
+            <div class="p-8 md:p-12">
+                <!-- Header -->
+                <div class="mb-8 pb-8 border-b border-gray-200">
+                    <p class="text-sm text-purple-600 font-semibold mb-3">
+                        <i class="far fa-calendar mr-2"></i>{{ news.created_at|date:"d MMMM Y в H:i" }}
+                    </p>
+                    <h1 class="text-4xl font-bold text-gray-900">{{ news.title }}</h1>
+                </div>
+
+                <!-- Text -->
+                <div class="prose prose-lg max-w-none mb-8">
+                    <div class="text-gray-700 whitespace-pre-wrap leading-relaxed text-lg">
+                        {{ news.text }}
+                    </div>
+                </div>
+
+                <!-- Author Info -->
+                <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-6 border border-purple-200 my-8">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white">
+                            <i class="fas fa-pen-fancy text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Опубликовано</p>
+                            <p class="font-bold text-gray-900">Mentoria Hub Team</p>
+                            <p class="text-sm text-gray-600 mt-1">{{ news.created_at|date:"d MMMM Y" }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA -->
+                <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg p-8 text-white text-center my-8">
+                    <h3 class="text-2xl font-bold mb-4">Хочешь узнать больше?</h3>
+                    <p class="text-purple-100 mb-6">Загляни на нашу платформу и найди новые возможности для развития</p>
+                    <div class="flex gap-4 justify-center flex-wrap">
+                        <a href="{% url 'course_list' %}" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+                            Курсы
+                        </a>
+                        <a href="{% url 'opportunity_list' %}" class="bg-white text-purple-600 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition">
+                            Возможности
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="border-t border-gray-200 pt-8">
+                    <a href="{% url 'news_list' %}" class="text-purple-600 font-semibold hover:text-purple-700 transition inline-block">
+                        <i class="fas fa-arrow-left mr-2"></i>Вернуться к новостям
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related News -->
+        <div class="mt-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8">
+                <i class="fas fa-newspaper text-purple-600 mr-2"></i>Другие Новости
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- More news would go here -->
+                <div class="bg-white rounded-lg shadow p-6 text-center text-gray-600">
+                    <p>Нет других новостей</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

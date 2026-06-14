@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Курсы - Mentoria Hub{% endblock %}
+
+{% block content %}
+        <!-- Header -->
+        <div class="mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Все Курсы</h1>
+            <p class="text-xl text-gray-600">Выбери курс и начни обучение сегодня</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-8">
+            <form method="get" class="flex gap-2">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Поиск курсов..."
+                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                >
+                <button type="submit" class="btn-gradient text-white px-6 py-3 rounded-lg font-semibold transition">
+                    <i class="fas fa-search mr-2"></i>Поиск
+                </button>
+            </form>
+        </div>
+
+        <!-- Courses Grid -->
+        {% if courses %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for course in courses %}
+                    <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg">
+                        <!-- Preview Image -->
+                        {% if course.preview_image %}
+                            <img src="{{ course.preview_image.url }}" alt="{{ course.title }}" class="w-full h-40 object-cover">
+                        {% else %}
+                            <div class="w-full h-40 bg-indigo-50 flex items-center justify-center">
+                                <i class="fas fa-book text-indigo-400 text-4xl opacity-70"></i>
+                            </div>
+                        {% endif %}
+
+                        <!-- Content -->
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ course.title }}</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ course.description }}</p>
+
+                            <!-- Stats -->
+                            <div class="flex items-center justify-between mb-6 py-3 border-t border-gray-200">
+                                <span class="text-sm text-gray-600">
+                                    <i class="fas fa-play-circle text-purple-600 mr-2"></i>{{ course.lessons.count }} уроков
+                                </span>
+                                <span class="text-sm text-gray-600">
+                                    <i class="far fa-calendar text-purple-600 mr-2"></i>{{ course.created_at|date:"M Y" }}
+                                </span>
+                            </div>
+
+                            <!-- Button -->
+                            <a href="{% url 'course_detail' course.slug %}" class="btn-gradient text-white w-full py-3 rounded-lg font-semibold transition text-center block">
+                                Начать Курс
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-20">
+                <div class="text-gray-400 text-4xl mb-4">
+                    <i class="fas fa-search"></i>
+                </div>
+                <p class="text-gray-600 text-xl">Курсов не найдено</p>
+                {% if search %}
+                    <a href="{% url 'course_list' %}" class="text-purple-600 font-semibold hover:text-purple-700 mt-4 inline-block">
+                        Очистить поиск <i class="fas fa-times ml-2"></i>
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+{% endblock %}

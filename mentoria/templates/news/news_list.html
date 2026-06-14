@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Новости - Mentoria Hub{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Все Новости</h1>
+            <p class="text-xl text-gray-600">Будьте в курсе всех обновлений и новостей Mentoria Hub</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-8">
+            <form method="get" class="flex gap-2">
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Поиск новостей..."
+                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                >
+                <button type="submit" class="btn-gradient text-white px-6 py-3 rounded-lg font-semibold transition">
+                    <i class="fas fa-search mr-2"></i>Поиск
+                </button>
+            </form>
+        </div>
+
+        <!-- News Grid -->
+        {% if news %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for item in news %}
+                    <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg">
+                        <!-- Image -->
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-48 object-cover">
+                        {% else %}
+                            <div class="w-full h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                                <i class="fas fa-newspaper text-white text-4xl opacity-50"></i>
+                            </div>
+                        {% endif %}
+
+                        <!-- Content -->
+                        <div class="p-6">
+                            <!-- Date -->
+                            <p class="text-sm text-purple-600 font-semibold mb-2">
+                                <i class="far fa-calendar mr-2"></i>{{ item.created_at|date:"d MMMM Y" }}
+                            </p>
+
+                            <!-- Title -->
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">{{ item.title }}</h3>
+
+                            <!-- Preview -->
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ item.text }}</p>
+
+                            <!-- Read More Link -->
+                            <a href="{% url 'news_detail' item.id %}" class="text-purple-600 font-semibold hover:text-purple-700 transition inline-block">
+                                Читать полностью <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-20">
+                <div class="text-gray-400 text-4xl mb-4">
+                    <i class="fas fa-search"></i>
+                </div>
+                <p class="text-gray-600 text-xl">Новостей не найдено</p>
+                {% if search %}
+                    <a href="{% url 'news_list' %}" class="text-purple-600 font-semibold hover:text-purple-700 mt-4 inline-block">
+                        Очистить поиск <i class="fas fa-times ml-2"></i>
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

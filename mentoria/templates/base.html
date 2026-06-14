@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mentoria Hub - Платформа развития{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card-hover {
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px -8px rgba(16, 24, 40, 0.08);
+        }
+        .btn-gradient {
+            background-color: #6b5ddf;
+            color: #fff;
+            transition: box-shadow 0.18s ease, transform 0.18s ease;
+        }
+        .btn-gradient:hover {
+            transform: none;
+            box-shadow: 0 8px 24px -8px rgba(107, 93, 223, 0.18);
+        }
+        .progress-bar {
+            background-color: #6b5ddf;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+    <body class="bg-gray-100 text-gray-800">
+    <!-- HEADER -->
+    <header class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="{% url 'home' %}" class="flex items-center space-x-2">
+                        <div class="btn-gradient text-white w-10 h-10 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">Mentoria Hub</span>
+                    </a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="nav-toggle" aria-label="Toggle navigation" class="p-2 rounded-md text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+
+                <!-- Navigation -->
+                <nav id="nav-menu" class="hidden md:flex space-x-6">
+                    <a href="{% url 'home' %}" class="text-gray-600 hover:text-gray-900 transition">Главная</a>
+                    <a href="{% url 'course_list' %}" class="text-gray-600 hover:text-gray-900 transition">Курсы</a>
+                    <a href="{% url 'opportunity_list' %}" class="text-gray-600 hover:text-gray-900 transition">Возможности</a>
+                    <a href="{% url 'news_list' %}" class="text-gray-600 hover:text-gray-900 transition">Новости</a>
+                </nav>
+
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboard' %}" class="hidden sm:inline-block text-gray-600 hover:text-gray-900 transition">
+                            <i class="fas fa-chart-line"></i> Дашборд
+                        </a>
+                        {% if user.is_superuser %}
+                            <a href="/admin/" class="hidden sm:inline-block text-red-600 hover:text-red-900 transition font-semibold">
+                                <i class="fas fa-cog"></i> Admin
+                            </a>
+                        {% endif %}
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-600">{{ user.username }}</span>
+                            <a href="{% url 'logout' %}" class="btn-gradient text-white px-4 py-2 rounded-lg text-sm transition shadow-sm">
+                                Выход
+                            </a>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-gray-600 hover:text-gray-900 transition">
+                            Вход
+                        </a>
+                        <a href="{% url 'register' %}" class="btn-gradient text-white px-4 py-2 rounded-lg text-sm transition shadow-sm">
+                            Регистрация
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="min-h-screen py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {% if messages %}
+                <div id="messages" class="space-y-3 mb-6">
+                    {% for message in messages %}
+                        <div class="flex items-start bg-white border border-gray-200 shadow-sm rounded-lg p-4">
+                            <div class="mr-3 text-green-500 mt-1"><i class="fas fa-check-circle"></i></div>
+                            <div class="flex-1 text-sm text-gray-800">{{ message }}</div>
+                            <button class="text-gray-400 hover:text-gray-600 ml-4" onclick="this.parentElement.remove()" aria-label="Dismiss message">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="bg-white rounded-xl shadow-md p-6">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white text-gray-700 py-12 mt-16 border-t">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Mentoria Hub</h3>
+                    <p class="text-gray-400 text-sm">Платформа для развития и поиска возможностей для школьников.</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold mb-4">Платформа</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="{% url 'course_list' %}" class="hover:text-white transition">Курсы</a></li>
+                        <li><a href="{% url 'opportunity_list' %}" class="hover:text-white transition">Возможности</a></li>
+                        <li><a href="{% url 'news_list' %}" class="hover:text-white transition">Новости</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold mb-4">Компания</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">О нас</a></li>
+                        <li><a href="#" class="hover:text-white transition">Контакты</a></li>
+                        <li><a href="#" class="hover:text-white transition">Вакансии</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-semibold mb-4">Контакты</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li>Email: info@mentoria.hub</li>
+                        <li>Телефон: +7 (999) 999-99-99</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 pt-8 text-center text-gray-500 text-sm">
+                <p>&copy; 2026 Mentoria Hub - LumenLabs. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+    <script>
+        // Mobile nav toggle
+        document.addEventListener('click', function (e) {
+            const toggle = document.getElementById('nav-toggle');
+            const menu = document.getElementById('nav-menu');
+            if (!toggle || !menu) return;
+
+            if (e.target.closest('#nav-toggle')) {
+                menu.classList.toggle('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

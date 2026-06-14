@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Выбор интересов - Mentoria Hub{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Выбери свои интересы
+            </h1>
+            <p class="text-xl text-gray-600">
+                Это поможет нам рекомендовать тебе подходящие возможности
+            </p>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            {% if form.non_field_errors %}
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Interest Cards -->
+                <div class="space-y-4">
+                    {% for value, label in form.interests.field.choices %}
+                        <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-purple-50 transition">
+                            <input
+                                type="checkbox"
+                                name="interests"
+                                value="{{ value }}"
+                                class="w-6 h-6 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
+                            >
+                            <div class="ml-4">
+                                <p class="text-lg font-semibold text-gray-900">{{ label }}</p>
+                                {% if value == 'BUSINESS' %}
+                                    <p class="text-sm text-gray-600">Конкурсы, стажировки и предпринимательство</p>
+                                {% elif value == 'STEM' %}
+                                    <p class="text-sm text-gray-600">Хакатоны, олимпиады по STEM</p>
+                                {% elif value == 'ENGLISH' %}
+                                    <p class="text-sm text-gray-600">Курсы и возможности по английскому языку</p>
+                                {% elif value == 'UNIVERSITY' %}
+                                    <p class="text-sm text-gray-600">Подготовка к университету, гранты</p>
+                                {% endif %}
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+
+                {% if form.interests.errors %}
+                    <p class="text-red-600 text-sm">{{ form.interests.errors.0 }}</p>
+                {% endif %}
+
+                <!-- Submit Button -->
+                <div class="flex gap-4 pt-6">
+                    <button type="submit" class="btn-gradient text-white flex-1 py-3 rounded-lg font-semibold transition">
+                        <i class="fas fa-check mr-2"></i>Продолжить
+                    </button>
+                </div>
+
+                <!-- Skip Link -->
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        Можно выбрать позже в профиле
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
