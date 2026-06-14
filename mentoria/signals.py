@@ -6,17 +6,13 @@ from .models import UserProfile
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    """
-    Создать профиль пользователя при регистрации.
-    """
+    # Create a UserProfile when a new User is created.
     if created:
         UserProfile.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    """
-    Сохранить профиль пользователя.
-    """
+    # Save the associated UserProfile when the User is saved.
     if hasattr(instance, 'profile'):
         instance.profile.save()

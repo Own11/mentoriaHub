@@ -4,12 +4,12 @@ register = template.Library()
 
 @register.filter
 def modulo(num, val):
-    """Получить остаток от деления"""
+    # Return the remainder of division
     return num % val
 
 @register.filter
 def multiply(value, arg):
-    """Умножить значение"""
+    # Multiply two values (handles iterables by length)
     try:
         v = value
         a = arg
@@ -30,7 +30,7 @@ def multiply(value, arg):
 
 @register.filter
 def divide(value, arg):
-    """Разделить значение"""
+    # Divide two values (handles iterables by length)
     def _to_number(x):
         # If iterable (list, queryset), use its length; try count() if available
         try:

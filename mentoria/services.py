@@ -3,15 +3,12 @@ from django.db.models import Q
 
 
 def get_recommendations(profile):
-    """
-    Система рекомендаций на основе интересов пользователя.
-    
-    Логика:
-    - STEM: показываем хакатоны и олимпиады
-    - BUSINESS: показываем конкурсы и стажировки
-    - ENGLISH: показываем все возможности с тегом English
-    - UNIVERSITY: показываем университетские программы и гранты
-    """
+    # Recommendation system based on user interests.
+    # Logic:
+    # - STEM: show hackathons and olympiads
+    # - BUSINESS: show competitions and internships
+    # - ENGLISH: show opportunities tagged 'English'
+    # - UNIVERSITY: show university programs and grants
     
     if not profile.interests:
         return Opportunity.objects.none()
@@ -37,23 +34,17 @@ def get_recommendations(profile):
 
 
 def get_featured_courses(limit=6):
-    """
-    Получить избранные курсы для главной страницы.
-    """
+    # Get featured courses for the homepage.
     from .models import Course
     return Course.objects.all()[:limit]
 
 
 def get_featured_opportunities(limit=6):
-    """
-    Получить избранные возможности для главной страницы.
-    """
+    # Get featured opportunities for the homepage.
     return Opportunity.objects.all()[:limit]
 
 
 def get_latest_news(limit=3):
-    """
-    Получить последние новости.
-    """
+    # Get latest news.
     from .models import News
     return News.objects.all()[:limit]

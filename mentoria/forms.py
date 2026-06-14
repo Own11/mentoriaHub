@@ -5,9 +5,7 @@ from .models import UserProfile
 
 
 class RegisterForm(UserCreationForm):
-    """
-    Форма регистрации пользователя.
-    """
+    # User registration form.
     email = forms.EmailField(
         required=True,
         widget=forms.EmailInput(attrs={
@@ -47,9 +45,7 @@ class RegisterForm(UserCreationForm):
 
 
 class InterestsForm(forms.Form):
-    """
-    Форма выбора интересов пользователя.
-    """
+    # User interests selection form.
     INTERESTS_CHOICES = [
         ('BUSINESS', 'Business'),
         ('STEM', 'STEM'),

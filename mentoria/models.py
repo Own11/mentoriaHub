@@ -5,9 +5,7 @@ import uuid
 
 
 class Skill(models.Model):
-    """
-    Навыки, которые преподаются в курсах.
-    """
+    # Skills taught in courses.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -23,9 +21,7 @@ class Skill(models.Model):
 
 
 class Course(models.Model):
-    """
-    Курсы, которые могут проходить пользователи.
-    """
+    # Courses that users can take.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
@@ -49,9 +45,7 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    """
-    Уроки внутри курсов.
-    """
+    # Lessons within courses.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons')
     title = models.CharField(max_length=200)
@@ -73,9 +67,7 @@ class Lesson(models.Model):
 
 
 class Opportunity(models.Model):
-    """
-    Олимпиады, хакатоны, конкурсы, стажировки и гранты.
-    """
+    # Opportunities: olympiads, hackathons, competitions, internships, grants.
     CATEGORY_CHOICES = [
         ('OLYMPIAD', 'Олимпиада'),
         ('HACKATHON', 'Хакатон'),
@@ -109,9 +101,7 @@ class Opportunity(models.Model):
 
 
 class News(models.Model):
-    """
-    Новости платформы.
-    """
+    # Platform news.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=200)
     text = models.TextField()
@@ -128,9 +118,7 @@ class News(models.Model):
 
 
 class UserProfile(models.Model):
-    """
-    Расширенный профиль пользователя.
-    """
+    # Extended user profile.
     INTEREST_CHOICES = [
         ('BUSINESS', 'Business'),
         ('STEM', 'STEM'),
@@ -158,25 +146,19 @@ class UserProfile(models.Model):
         return f"Profile of {self.user.username}"
 
     def add_xp(self, xp_amount):
-        """
-        Добавить XP и обновить уровень.
-        """
+        # Add XP and update level.
         self.xp += xp_amount
         self.level = self.xp // 100 + 1
         self.save()
 
     def increment_streak(self):
-        """
-        Увеличить streak и обновить last_active.
-        """
+        # Increment streak and update last_active.
         self.streak += 1
         from django.utils import timezone
         self.last_active = timezone.now()
         self.save()
 
     def get_recommendations_count(self):
-        """
-        Получить количество рекомендаций.
-        """
+        # Return count of recommendations for this profile.
         from .services import get_recommendations
         return get_recommendations(self).count()

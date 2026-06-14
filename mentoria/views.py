@@ -23,9 +23,7 @@ from .services import (
 # ============================================
 
 def register(request):
-    """
-    Страница регистрации.
-    """
+    # Registration page view.
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -40,9 +38,7 @@ def register(request):
 
 
 def login_view(request):
-    """
-    Страница входа.
-    """
+    # Login page view.
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -60,9 +56,7 @@ def login_view(request):
 
 
 def logout_view(request):
-    """
-    Выход из системы.
-    """
+    # Logout view.
     logout(request)
     return redirect('home')
 
@@ -73,9 +67,7 @@ def logout_view(request):
 
 @login_required(login_url='login')
 def interests_view(request):
-    """
-    Страница выбора интересов.
-    """
+    # Interests selection (onboarding) view.
     profile = request.user.profile
     
     if request.method == 'POST':
@@ -96,9 +88,7 @@ def interests_view(request):
 # ============================================
 
 def home(request):
-    """
-    Главная страница.
-    """
+    # Home page view.
     latest_news = get_latest_news(3)
     featured_courses = get_featured_courses(6)
     featured_opportunities = get_featured_opportunities(6)
@@ -113,9 +103,7 @@ def home(request):
 
 @login_required(login_url='login')
 def dashboard(request):
-    """
-    Дашборд пользователя.
-    """
+    # User dashboard view.
     profile = request.user.profile
     
     if not profile.interests:
@@ -144,9 +132,7 @@ def dashboard(request):
 # ============================================
 
 def course_list(request):
-    """
-    Список всех курсов.
-    """
+    # List all courses.
     courses = Course.objects.all()
     
     search = request.GET.get('search', '')
@@ -163,9 +149,7 @@ def course_list(request):
 
 
 def course_detail(request, slug):
-    """
-    Детальная страница курса с прогрессом.
-    """
+    # Course detail page with progress.
     course = get_object_or_404(Course, slug=slug)
     lessons = course.lessons.all().order_by('order')
     
@@ -196,9 +180,7 @@ def course_detail(request, slug):
 
 @login_required(login_url='login')
 def lesson_detail(request, lesson_id):
-    """
-    Детальная страница урока.
-    """
+    # Lesson detail page.
     lesson = get_object_or_404(Lesson, id=lesson_id)
     profile = request.user.profile
     
@@ -237,9 +219,7 @@ def lesson_detail(request, lesson_id):
 @login_required(login_url='login')
 @require_POST
 def complete_lesson(request, lesson_id):
-    """
-    Отметить урок как завершённый.
-    """
+    # Mark lesson as completed (AJAX or redirect).
     lesson = get_object_or_404(Lesson, id=lesson_id)
     profile = request.user.profile
     
@@ -272,9 +252,7 @@ def complete_lesson(request, lesson_id):
 # ============================================
 
 def opportunity_list(request):
-    """
-    Список всех возможностей.
-    """
+    # List all opportunities.
     opportunities = Opportunity.objects.all()
     
     category = request.GET.get('category', '')
@@ -302,9 +280,7 @@ def opportunity_list(request):
 
 
 def opportunity_detail(request, slug):
-    """
-    Детальная страница возможности.
-    """
+    # Opportunity detail page.
     opportunity = get_object_or_404(Opportunity, slug=slug)
     
     is_saved = False
@@ -321,9 +297,7 @@ def opportunity_detail(request, slug):
 @login_required(login_url='login')
 @require_POST
 def save_opportunity(request, opportunity_id):
-    """
-    Сохранить или удалить возможность из избранного.
-    """
+    # Toggle save/unsave opportunity for user.
     opportunity = get_object_or_404(Opportunity, id=opportunity_id)
     profile = request.user.profile
     
@@ -348,9 +322,7 @@ def save_opportunity(request, opportunity_id):
 # ============================================
 
 def news_list(request):
-    """
-    Список всех новостей.
-    """
+    # List all news items.
     news = News.objects.all()
     
     search = request.GET.get('search', '')
@@ -367,9 +339,7 @@ def news_list(request):
 
 
 def news_detail(request, slug):
-    """
-    Детальная страница новости.
-    """
+    # News detail page.
     news = get_object_or_404(News, id=slug)
     
     context = {
