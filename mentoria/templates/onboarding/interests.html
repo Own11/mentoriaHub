@@ -3,76 +3,71 @@
 {% block title %}Выбор интересов - Mentoria Hub{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-2xl mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">
-                Выбери свои интересы
-            </h1>
-            <p class="text-xl text-gray-600">
-                Это поможет нам рекомендовать тебе подходящие возможности
-            </p>
-        </div>
+<div class="max-w-[640px] mx-auto my-6">
+    <div class="text-center mb-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            Выбери свои интересы
+        </h1>
+        <p class="text-sm text-gray-500 mt-1.5">
+            Это поможет нам более точно рекомендовать тебе подходящие образовательные возможности и курсы
+        </p>
+    </div>
 
-        <!-- Form -->
-        <div class="bg-white rounded-xl shadow-lg p-8">
-            {% if form.non_field_errors %}
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-                    {% for error in form.non_field_errors %}
-                        <p>{{ error }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
+    <div class="bg-white rounded-xl border border-gray-200 p-6 sm:p-8">
+        {% if form.non_field_errors %}
+            <div class="bg-rose-50 border border-rose-200 text-rose-700 px-4 py-2.5 rounded-md text-xs mb-5">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-            <form method="post" class="space-y-6">
-                {% csrf_token %}
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
 
-                <!-- Interest Cards -->
-                <div class="space-y-4">
-                    {% for value, label in form.interests.field.choices %}
-                        <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-purple-50 transition">
+            <div class="space-y-3">
+                {% for value, label in form.interests.field.choices %}
+                    <label class="flex items-start p-4 border border-gray-200 rounded-lg cursor-pointer hover:border-gray-300 transition-colors bg-white">
+                        <div class="flex items-center h-5 mt-0.5">
                             <input
                                 type="checkbox"
                                 name="interests"
                                 value="{{ value }}"
-                                class="w-6 h-6 text-purple-600 rounded focus:ring-2 focus:ring-purple-500"
+                                class="w-4 h-4 text-[#4caf50] border-gray-300 rounded focus:ring-offset-0 focus:ring-1 focus:ring-[#4caf50]"
                             >
-                            <div class="ml-4">
-                                <p class="text-lg font-semibold text-gray-900">{{ label }}</p>
-                                {% if value == 'BUSINESS' %}
-                                    <p class="text-sm text-gray-600">Конкурсы, стажировки и предпринимательство</p>
-                                {% elif value == 'STEM' %}
-                                    <p class="text-sm text-gray-600">Хакатоны, олимпиады по STEM</p>
-                                {% elif value == 'ENGLISH' %}
-                                    <p class="text-sm text-gray-600">Курсы и возможности по английскому языку</p>
-                                {% elif value == 'UNIVERSITY' %}
-                                    <p class="text-sm text-gray-600">Подготовка к университету, гранты</p>
-                                {% endif %}
-                            </div>
-                        </label>
-                    {% endfor %}
-                </div>
+                        </div>
+                        <div class="ml-3.5">
+                            <p class="text-sm font-bold text-gray-900">{{ label }}</p>
+                            {% if value == 'BUSINESS' %}
+                                <p class="text-xs text-gray-500 mt-0.5">Конкурсы, стажировки, кейс-чемпионаты и молодежное предпринимательство</p>
+                            {% elif value == 'STEM' %}
+                                <p class="text-xs text-gray-500 mt-0.5">Хакатоны, олимпиады по программированию, физике и точным наукам</p>
+                            {% elif value == 'ENGLISH' %}
+                                <p class="text-xs text-gray-500 mt-0.5">Курсы, языковые клубы и международные возможности по английскому языку</p>
+                            {% elif value == 'UNIVERSITY' %}
+                                <p class="text-xs text-gray-500 mt-0.5">Программы подготовки к университету, гранты и конкурсы вузов</p>
+                            {% endif %}
+                        </div>
+                    </label>
+                {% endfor %}
+            </div>
 
-                {% if form.interests.errors %}
-                    <p class="text-red-600 text-sm">{{ form.interests.errors.0 }}</p>
-                {% endif %}
+            {% if form.interests.errors %}
+                <p class="text-rose-600 text-xs mt-1 flex items-center"><i class="fas fa-exclamation-circle mr-1"></i>{{ form.interests.errors.0 }}</p>
+            {% endif %}
 
-                <!-- Submit Button -->
-                <div class="flex gap-4 pt-6">
-                    <button type="submit" class="btn-gradient text-white flex-1 py-3 rounded-lg font-semibold transition">
-                        <i class="fas fa-check mr-2"></i>Продолжить
-                    </button>
-                </div>
+            <div class="pt-2">
+                <button type="submit" class="btn-stepik text-white w-full py-2.5 rounded-md text-sm font-medium transition shadow-sm">
+                    Продолжить
+                </button>
+            </div>
 
-                <!-- Skip Link -->
-                <div class="text-center">
-                    <p class="text-sm text-gray-600">
-                        Можно выбрать позже в профиле
-                    </p>
-                </div>
-            </form>
-        </div>
+            <div class="text-center pt-2">
+                <p class="text-xs text-gray-400">
+                    Вы всегда сможете изменить эти параметры позже в настройках своего профиля.
+                </p>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

@@ -4,220 +4,194 @@
 {% block title %}Дашборд - Mentoria Hub{% endblock %}
 
 {% block content %}
-        <!-- Header with Stats -->
-        <div class="mb-12">
-            <div class="flex justify-between items-start mb-8">
+<div class="mb-10">
+    <div class="flex justify-between items-start mb-6">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 tracking-tight">
+                Добро пожаловать, {{ user.first_name|default:user.username }}!
+            </h1>
+            <p class="text-sm text-gray-500 mt-1">Отслеживай свой прогресс и развивайся вместе с нами</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="card-hover bg-white rounded-xl p-5 border border-gray-200">
+            <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900">
-                        Добро пожаловать, {{ user.first_name|default:user.username }}!
-                    </h1>
-                    <p class="text-gray-600 mt-2">Отслеживай свой прогресс и развивайся вместе с нами</p>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">XP</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ profile.xp }}</p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        {{ profile.xp|add:0 }} из {{ profile.level|multiply:100 }} до уровня
+                    </p>
+                </div>
+                <div class="bg-gray-100 text-gray-600 w-10 h-10 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-star text-base"></i>
                 </div>
             </div>
+            <div class="mt-4 bg-gray-100 rounded-full h-1.5">
+                <div class="btn-stepik h-full rounded-full" style="width: {{ profile.xp|modulo:100 }}%"></div>
+            </div>
+        </div>
 
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- XP Card -->
-                <div class="card-hover bg-white rounded-xl p-6 shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-600 text-sm font-semibold">XP</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ profile.xp }}</p>
-                            <p class="text-sm text-gray-500 mt-1">
-                                {{ profile.xp|add:0 }} из {{ profile.level|multiply:100 }} до уровня
-                            </p>
-                        </div>
-                        <div class="btn-gradient text-white w-12 h-12 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <!-- Progress Bar -->
-                    <div class="mt-4 bg-gray-200 rounded-full h-2">
-                        <div class="progress-bar h-full rounded-full" style="width: {{ profile.xp|modulo:100 }}%"></div>
-                    </div>
+        <div class="card-hover bg-white rounded-xl p-5 border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Уровень</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ profile.level }}</p>
+                    <p class="text-xs text-gray-500 mt-1">продолжайте обучаться</p>
                 </div>
-
-                <!-- Level Card -->
-                <div class="card-hover bg-white rounded-xl p-6 shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-600 text-sm font-semibold">Уровень</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ profile.level }}</p>
-                            <p class="text-sm text-gray-500 mt-1">продолжайте обучаться</p>
-                        </div>
-                        <div class="btn-gradient text-white w-12 h-12 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Streak Card -->
-                <div class="card-hover bg-white rounded-xl p-6 shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-600 text-sm font-semibold">Серия</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ profile.streak }}</p>
-                            <p class="text-sm text-gray-500 mt-1">дни подряд</p>
-                        </div>
-                        <div class="btn-gradient text-white w-12 h-12 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-fire"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Courses Card -->
-                <div class="card-hover bg-white rounded-xl p-6 shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-600 text-sm font-semibold">Уроки</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">{{ completed_lessons }}/{{ total_lessons }}</p>
-                            <p class="text-sm text-gray-500 mt-1">завершено</p>
-                        </div>
-                        <div class="btn-gradient text-white w-12 h-12 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-book"></i>
-                        </div>
-                    </div>
+                <div class="bg-gray-100 text-gray-600 w-10 h-10 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-trophy text-base"></i>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Main Content -->
-            <div class="lg:col-span-2 space-y-8">
-                <!-- Recommended Opportunities -->
-                <div class="bg-white rounded-xl shadow-lg p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">
-                            <i class="fas fa-lightbulb text-purple-600 mr-2"></i>Рекомендации Для Тебя
-                        </h2>
-                    </div>
-
-                    {% if recommendations %}
-                        <div class="space-y-4">
-                            {% for opp in recommendations %}
-                                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition">
-                                    <div class="flex items-start justify-between">
-                                        <div class="flex-1">
-                                            <div class="flex items-center gap-2 mb-2">
-                                                <span class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full
-                                                    {% if opp.category == 'OLYMPIAD' %}bg-green-500
-                                                    {% elif opp.category == 'HACKATHON' %}bg-blue-500
-                                                    {% elif opp.category == 'COMPETITION' %}bg-yellow-500
-                                                    {% elif opp.category == 'INTERNSHIP' %}bg-purple-500
-                                                    {% else %}bg-red-500{% endif %}">
-                                                    {{ opp.get_category_display }}
-                                                </span>
-                                            </div>
-                                            <h3 class="text-lg font-semibold text-gray-900">{{ opp.title }}</h3>
-                                            <p class="text-sm text-gray-600 mt-1">
-                                                <i class="far fa-calendar mr-2"></i>Срок: {{ opp.deadline|date:"d.m.Y" }}
-                                            </p>
-                                        </div>
-                                        <a href="{% url 'opportunity_detail' opp.slug %}" class="btn-gradient text-white px-4 py-2 rounded-lg text-sm transition">
-                                            Подробнее
-                                        </a>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="text-center py-12 text-gray-600">
-                            <p>Нет рекомендаций на основе твоих интересов</p>
-                        </div>
-                    {% endif %}
+        <div class="card-hover bg-white rounded-xl p-5 border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Серия</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ profile.streak }}</p>
+                    <p class="text-xs text-gray-500 mt-1">дни подряд</p>
                 </div>
-
-                <!-- Upcoming Deadlines -->
-                <div class="bg-white rounded-xl shadow-lg p-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">
-                        <i class="fas fa-calendar-alt text-purple-600 mr-2"></i>Ближайшие Сроки
-                    </h2>
-
-                    {% if upcoming_deadlines %}
-                        <div class="space-y-3">
-                            {% for opp in upcoming_deadlines %}
-                                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg">
-                                    <div>
-                                        <p class="font-semibold text-gray-900">{{ opp.title }}</p>
-                                        <p class="text-sm text-gray-600">{{ opp.get_category_display }}</p>
-                                    </div>
-                                    <span class="text-sm font-semibold text-purple-600">
-                                        {{ opp.deadline|timeuntil }}
-                                    </span>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-center text-gray-600 py-8">Нет близких сроков</p>
-                    {% endif %}
+                <div class="bg-gray-100 text-gray-600 w-10 h-10 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-fire text-base"></i>
                 </div>
             </div>
+        </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-8">
-                <!-- Saved Opportunities -->
-                <div class="bg-white rounded-xl shadow-lg p-8">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-lg font-bold text-gray-900">
-                            <i class="fas fa-bookmark text-purple-600 mr-2"></i>Сохранённое
-                        </h2>
-                    </div>
-
-                    {% if saved_opportunities %}
-                        <div class="space-y-3">
-                            {% for opp in saved_opportunities %}
-                                <div class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-                                    <a href="{% url 'opportunity_detail' opp.slug %}" class="text-sm font-semibold text-gray-900 hover:text-purple-600">
-                                        {{ opp.title }}
-                                    </a>
-                                    <p class="text-xs text-gray-600 mt-1">{{ opp.get_category_display }}</p>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="text-center text-gray-600 text-sm py-6">
-                            Ещё не сохранено
-                        </p>
-                    {% endif %}
-
-                    <a href="{% url 'opportunity_list' %}" class="block text-center mt-4 text-purple-600 font-semibold hover:text-purple-700 text-sm">
-                        Смотреть Все <i class="fas fa-arrow-right ml-2"></i>
-                    </a>
+        <div class="card-hover bg-white rounded-xl p-5 border border-gray-200">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-400 text-xs font-bold uppercase tracking-wider">Уроки</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">{{ completed_lessons }}/{{ total_lessons }}</p>
+                    <p class="text-xs text-gray-500 mt-1">завершено</p>
                 </div>
-
-                <!-- Quick Links -->
-                <div class="bg-white rounded-xl shadow p-6 border border-gray-100 text-gray-800">
-                    <h3 class="text-lg font-semibold mb-4">Быстрые Ссылки</h3>
-                    <div class="space-y-3">
-                        <a href="{% url 'course_list' %}" class="flex items-center text-gray-700 hover:text-indigo-600 transition">
-                            <i class="fas fa-book mr-3 text-indigo-500"></i>Курсы
-                        </a>
-                        <a href="{% url 'opportunity_list' %}" class="flex items-center text-gray-700 hover:text-indigo-600 transition">
-                            <i class="fas fa-target mr-3 text-indigo-500"></i>Возможности
-                        </a>
-                        <a href="{% url 'news_list' %}" class="flex items-center text-gray-700 hover:text-indigo-600 transition">
-                            <i class="fas fa-newspaper mr-3 text-indigo-500"></i>Новости
-                        </a>
-                        <a href="{% url 'interests' %}" class="flex items-center text-gray-700 hover:text-indigo-600 transition">
-                            <i class="fas fa-cog mr-3 text-indigo-500"></i>Интересы
-                        </a>
-                    </div>
+                <div class="bg-gray-100 text-gray-600 w-10 h-10 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-book text-base"></i>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Custom CSS for modulo filter -->
-<style>
-    /* Additional styles */
-</style>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-900 tracking-tight">
+                    <i class="fas fa-lightbulb text-[#4caf50] mr-2 text-lg"></i>Рекомендации для тебя
+                </h2>
+            </div>
 
-<!-- Custom JS -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Add any interactivity here
-    });
-</script>
+            {% if recommendations %}
+                <div class="space-y-4">
+                    {% for opp in recommendations %}
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <span class="inline-block px-2.5 py-0.5 text-xs font-medium rounded text-white
+                                            {% if opp.category == 'OLYMPIAD' %}bg-emerald-600
+                                            {% elif opp.category == 'HACKATHON' %}bg-blue-600
+                                            {% elif opp.category == 'COMPETITION' %}bg-amber-500
+                                            {% elif opp.category == 'INTERNSHIP' %}bg-indigo-600
+                                            {% else %}bg-rose-600{% endif %}">
+                                            {{ opp.get_category_display }}
+                                        </span>
+                                    </div>
+                                    <h3 class="text-base font-semibold text-gray-900 hover:text-[#4caf50] transition-colors">
+                                        <a href="{% url 'opportunity_detail' opp.slug %}">{{ opp.title }}</a>
+                                    </h3>
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        <i class="far fa-calendar mr-1.5"></i>Срок: {{ opp.deadline|date:"d.m.Y" }}
+                                    </p>
+                                </div>
+                                <div class="flex items-center justify-end">
+                                    <a href="{% url 'opportunity_detail' opp.slug %}" class="btn-stepik text-xs font-medium px-4 py-2 rounded-md transition text-center w-full sm:w-auto">
+                                        Подробнее
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-10 text-gray-400 text-sm">
+                    <p>Нет рекомендаций на основе твоих интересов</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+            <h2 class="text-xl font-bold text-gray-900 tracking-tight mb-4">
+                <i class="fas fa-calendar-alt text-[#4caf50] mr-2 text-lg"></i>Ближайшие сроки
+            </h2>
+
+            {% if upcoming_deadlines %}
+                <div class="space-y-2">
+                    {% for opp in upcoming_deadlines %}
+                        <div class="flex items-center justify-between p-3 bg-gray-50 border border-gray-100 rounded-lg">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">{{ opp.title }}</p>
+                                <p class="text-xs text-gray-400 mt-0.5">{{ opp.get_category_display }}</p>
+                            </div>
+                            <span class="text-xs font-semibold text-[#4caf50] bg-green-50 px-2 py-1 rounded">
+                                {{ opp.deadline|timeuntil }}
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-gray-400 text-sm py-6">Нет близких сроков</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="space-y-6">
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-base font-bold text-gray-900 tracking-tight">
+                    <i class="fas fa-bookmark text-[#4caf50] mr-2"></i>Сохранённое
+                </h2>
+            </div>
+
+            {% if saved_opportunities %}
+                <div class="space-y-3">
+                    {% for opp in saved_opportunities %}
+                        <div class="pb-3 border-b border-gray-100 last:border-0 last:pb-0">
+                            <a href="{% url 'opportunity_detail' opp.slug %}" class="text-sm font-medium text-gray-900 hover:text-[#4caf50] transition-colors line-clamp-2">
+                                {{ opp.title }}
+                            </a>
+                            <p class="text-xs text-gray-400 mt-1">{{ opp.get_category_display }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-center text-gray-400 text-xs py-4">Ещё не сохранено</p>
+            {% endif %}
+
+            <a href="{% url 'opportunity_list' %}" class="block text-center mt-4 text-xs font-bold text-[#4caf50] hover:text-[#45a049] transition-colors pt-3 border-t border-gray-100">
+                Смотреть все <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
+            </a>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-5">
+            <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wider text-gray-400 mb-4">Быстрые ссылки</h3>
+            <div class="space-y-3 text-sm font-medium">
+                <a href="{% url 'course_list' %}" class="flex items-center text-gray-700 hover:text-[#4caf50] transition-colors">
+                    <i class="fas fa-book mr-3 text-gray-400 w-4"></i>Курсы
+                </a>
+                <a href="{% url 'opportunity_list' %}" class="flex items-center text-gray-700 hover:text-[#4caf50] transition-colors">
+                    <i class="fas fa-bullseye mr-3 text-gray-400 w-4"></i>Возможности
+                </a>
+                <a href="{% url 'news_list' %}" class="flex items-center text-gray-700 hover:text-[#4caf50] transition-colors">
+                    <i class="fas fa-newspaper mr-3 text-gray-400 w-4"></i>Новости
+                </a>
+                <a href="{% url 'interests' %}" class="flex items-center text-gray-700 hover:text-[#4caf50] transition-colors">
+                    <i class="fas fa-sliders-h mr-3 text-gray-400 w-4"></i>Интересы
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

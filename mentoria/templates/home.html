@@ -3,30 +3,26 @@
 {% block title %}Главная - Mentoria Hub{% endblock %}
 
 {% block content %}
-<div class="bg-white">
-    <!-- HERO SECTION -->
-    <section class="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center">
-                <h1 class="text-5xl md:text-6xl font-bold mb-6">
-                    <span class="gradient-text">Найди свой путь</span>
-                    <br>
-                    <span class="text-gray-900">к успеху</span>
+<div class="bg-[#f8f9fa] -mt-6"> <section class="bg-white border-b border-gray-200 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[1200px] mx-auto">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-black text-gray-900 tracking-tight mb-4">
+                    Найди свой путь к успеху
                 </h1>
-                <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-                    Mentoria Hub помогает школьникам находить олимпиады, хакатоны, курсы и возможности для развития.
+                <p class="text-lg text-gray-500 mb-8 font-normal leading-relaxed">
+                    Mentoria Hub помогает школьникам находить олимпиады, хакатоны, актуальные курсы и лучшие возможности для академического и практического развития.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="btn-gradient text-white px-8 py-3 rounded-lg text-lg font-semibold transition">
-                            <i class="fas fa-chart-line mr-2"></i>Открыть Дашборд
+                        <a href="{% url 'dashboard' %}" class="btn-stepik text-white px-6 py-2.5 rounded-md text-sm font-medium transition shadow-sm">
+                            <i class="fas fa-chart-line mr-2"></i>Открыть дашборд
                         </a>
                     {% else %}
-                        <a href="{% url 'register' %}" class="btn-gradient text-white px-8 py-3 rounded-lg text-lg font-semibold transition">
-                            <i class="fas fa-rocket mr-2"></i>Начать Сейчас
+                        <a href="{% url 'register' %}" class="btn-stepik text-white px-6 py-2.5 rounded-md text-sm font-medium transition shadow-sm">
+                            Начать сейчас
                         </a>
-                        <a href="{% url 'login' %}" class="bg-white border-2 border-purple-500 text-purple-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-purple-50 transition">
-                            <i class="fas fa-sign-in-alt mr-2"></i>Войти
+                        <a href="{% url 'login' %}" class="bg-white border border-gray-300 text-gray-700 px-6 py-2.5 rounded-md text-sm font-medium hover:bg-gray-50 transition">
+                            Войти
                         </a>
                     {% endif %}
                 </div>
@@ -34,73 +30,81 @@
         </div>
     </section>
 
-    <!-- LATEST NEWS SECTION -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-purple-50">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-900">Последние Новости</h2>
-                <a href="{% url 'news_list' %}" class="text-purple-600 font-semibold hover:text-purple-700 transition">
-                    Все новости <i class="fas fa-arrow-right ml-2"></i>
+    <section class="py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[1200px] mx-auto">
+            <div class="flex justify-between items-baseline mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Последние новости</h2>
+                <a href="{% url 'news_list' %}" class="text-sm font-bold text-[#4caf50] hover:text-[#45a049] transition-colors">
+                    Все новости <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
                 </a>
             </div>
 
             {% if latest_news %}
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {% for news in latest_news %}
-                        <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg">
+                        <div class="card-hover bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col">
                             {% if news.image %}
-                                <img src="{{ news.image.url }}" alt="{{ news.title }}" class="w-full h-40 object-cover">
+                                <img src="{{ news.image.url }}" alt="{{ news.title }}" class="w-full h-44 object-cover">
                             {% else %}
-                                <div class="w-full h-40 bg-gradient-to-br from-blue-400 to-purple-500"></div>
+                                <div class="w-full h-44 bg-gray-100 flex items-center justify-center text-gray-300">
+                                    <i class="far fa-newspaper text-4xl"></i>
+                                </div>
                             {% endif %}
-                            <div class="p-6">
-                                <p class="text-sm text-purple-600 font-semibold mb-2">
-                                    <i class="far fa-calendar mr-2"></i>{{ news.created_at|date:"d.m.Y" }}
-                                </p>
-                                <h3 class="text-xl font-bold text-gray-900 mb-3">{{ news.title }}</h3>
-                                <p class="text-gray-600 mb-4 line-clamp-2">{{ news.text }}</p>
-                                <a href="{% url 'news_detail' news.id %}" class="text-purple-600 font-semibold hover:text-purple-700 transition">
-                                    Читать далее <i class="fas fa-arrow-right ml-2"></i>
+                            <div class="p-5 flex-grow flex flex-col justify-between">
+                                <div>
+                                    <p class="text-xs text-gray-400 font-medium mb-2">
+                                        <i class="far fa-calendar mr-1"></i>{{ news.created_at|date:"d.m.Y" }}
+                                    </p>
+                                    <h3 class="text-base font-bold text-gray-900 mb-2 line-clamp-2">{{ news.title }}</h3>
+                                    <p class="text-sm text-gray-500 mb-4 line-clamp-2">{{ news.text }}</p>
+                                </div>
+                                <a href="{% url 'news_detail' news.id %}" class="text-xs font-bold text-[#4caf50] hover:text-[#45a049] transition-colors inline-flex items-center">
+                                    Читать далее <i class="fas fa-chevron-right ml-1 text-[8px]"></i>
                                 </a>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="text-center py-12">
-                    <p class="text-gray-600 text-lg">Новостей пока нет</p>
+                <div class="text-center py-10 bg-white rounded-xl border border-gray-200 text-gray-400 text-sm">
+                    <p>Новостей пока нет</p>
                 </div>
             {% endif %}
         </div>
     </section>
 
-    <!-- FEATURED COURSES SECTION -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-900">Популярные Курсы</h2>
-                <a href="{% url 'course_list' %}" class="text-purple-600 font-semibold hover:text-purple-700 transition">
-                    Все курсы <i class="fas fa-arrow-right ml-2"></i>
+    <section class="py-12 px-4 sm:px-6 lg:px-8 bg-white border-y border-gray-200">
+        <div class="max-w-[1200px] mx-auto">
+            <div class="flex justify-between items-baseline mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Популярные курсы</h2>
+                <a href="{% url 'course_list' %}" class="text-sm font-bold text-[#4caf50] hover:text-[#45a049] transition-colors">
+                    Все курсы <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
                 </a>
             </div>
 
             {% if featured_courses %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for course in featured_courses %}
-                        <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg">
+                        <div class="card-hover bg-white rounded-xl overflow-hidden border border-gray-200 flex flex-col">
                             {% if course.preview_image %}
                                 <img src="{{ course.preview_image.url }}" alt="{{ course.title }}" class="w-full h-40 object-cover">
                             {% else %}
-                                <div class="w-full h-40 bg-gradient-to-br from-indigo-400 to-blue-500"></div>
+                                <div class="w-full h-40 bg-slate-100 flex items-center justify-center text-slate-300">
+                                    <i class="fas fa-graduation-cap text-4xl"></i>
+                                </div>
                             {% endif %}
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ course.title }}</h3>
-                                <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ course.description }}</p>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-purple-600 font-semibold text-sm">
-                                        <i class="fas fa-book mr-2"></i>{{ course.lessons.count }} уроков
+                            <div class="p-5 flex-grow flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-base font-bold text-gray-900 mb-1.5 line-clamp-2 hover:text-[#4caf50] transition-colors">
+                                        <a href="{% url 'course_detail' course.slug %}">{{ course.title }}</a>
+                                    </h3>
+                                    <p class="text-xs text-gray-500 mb-4 line-clamp-2">{{ course.description }}</p>
+                                </div>
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                    <span class="text-gray-400 text-xs font-medium">
+                                        <i class="fas fa-book mr-1"></i>{{ course.lessons.count }} уроков
                                     </span>
-                                    <a href="{% url 'course_detail' course.slug %}" class="btn-gradient text-white px-4 py-2 rounded-lg text-sm transition">
+                                    <a href="{% url 'course_detail' course.slug %}" class="btn-stepik text-xs font-medium px-3 py-1.5 rounded transition">
                                         Начать
                                     </a>
                                 </div>
@@ -109,70 +113,70 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="text-center py-12">
-                    <p class="text-gray-600 text-lg">Курсов пока нет</p>
+                <div class="text-center py-10 text-gray-400 text-sm">
+                    <p>Курсов пока нет</p>
                 </div>
             {% endif %}
         </div>
     </section>
 
-    <!-- FEATURED OPPORTUNITIES SECTION -->
-    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-purple-50">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-900">Актуальные Возможности</h2>
-                <a href="{% url 'opportunity_list' %}" class="text-purple-600 font-semibold hover:text-purple-700 transition">
-                    Все возможности <i class="fas fa-arrow-right ml-2"></i>
+    <section class="py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[1200px] mx-auto">
+            <div class="flex justify-between items-baseline mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Актуальные возможности</h2>
+                <a href="{% url 'opportunity_list' %}" class="text-sm font-bold text-[#4caf50] hover:text-[#45a049] transition-colors">
+                    Все возможности <i class="fas fa-arrow-right ml-1 text-[10px]"></i>
                 </a>
             </div>
 
             {% if featured_opportunities %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% for opp in featured_opportunities %}
-                        <div class="card-hover bg-white rounded-xl p-6 shadow-lg">
-                            <div class="flex items-center justify-between mb-4">
-                                <span class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full
-                                    {% if opp.category == 'OLYMPIAD' %}bg-green-500
-                                    {% elif opp.category == 'HACKATHON' %}bg-blue-500
-                                    {% elif opp.category == 'COMPETITION' %}bg-yellow-500
-                                    {% elif opp.category == 'INTERNSHIP' %}bg-purple-500
-                                    {% else %}bg-red-500{% endif %}">
-                                    {{ opp.get_category_display }}
-                                </span>
-                                <span class="text-sm text-gray-500">
-                                    <i class="far fa-calendar mr-2"></i>{{ opp.deadline|date:"d.m.Y" }}
-                                </span>
+                        <div class="card-hover bg-white rounded-xl p-5 border border-gray-200 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between gap-2 mb-3">
+                                    <span class="inline-block px-2 py-0.5 text-[11px] font-medium rounded text-white
+                                        {% if opp.category == 'OLYMPIAD' %}bg-emerald-600
+                                        {% elif opp.category == 'HACKATHON' %}bg-blue-600
+                                        {% elif opp.category == 'COMPETITION' %}bg-amber-500
+                                        {% elif opp.category == 'INTERNSHIP' %}bg-indigo-600
+                                        {% else %}bg-rose-600{% endif %}">
+                                        {{ opp.get_category_display }}
+                                    </span>
+                                    <span class="text-xs text-gray-400">
+                                        <i class="far fa-calendar mr-1"></i>{{ opp.deadline|date:"d.m.Y" }}
+                                    </span>
+                                </div>
+                                <h3 class="text-base font-bold text-gray-900 mb-2 line-clamp-2">{{ opp.title }}</h3>
+                                <p class="text-xs text-gray-500 mb-4 line-clamp-2">{{ opp.description }}</p>
                             </div>
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">{{ opp.title }}</h3>
-                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ opp.description }}</p>
-                            <a href="{% url 'opportunity_detail' opp.slug %}" class="btn-gradient text-white px-4 py-2 rounded-lg text-sm transition w-full text-center block">
-                                Узнать Больше
+                            <a href="{% url 'opportunity_detail' opp.slug %}" class="border border-gray-200 text-gray-700 hover:bg-gray-50 text-xs font-medium py-2 rounded-md transition text-center block w-full mt-2">
+                                Узнать больше
                             </a>
                         </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="text-center py-12">
-                    <p class="text-gray-600 text-lg">Возможностей пока нет</p>
+                <div class="text-center py-10 bg-white rounded-xl border border-gray-200 text-gray-400 text-sm">
+                    <p>Возможностей пока нет</p>
                 </div>
             {% endif %}
         </div>
     </section>
 
-    <!-- CTA SECTION -->
-    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-purple-600 to-indigo-600">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-4xl font-bold text-white mb-6">Готов начать свой путь?</h2>
-            <p class="text-xl text-purple-100 mb-8">
-                Присоединяйся к тысячам школьников, которые уже используют Mentoria Hub для достижения своих целей.
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-[#1b1b1d] text-white text-center">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold tracking-tight mb-4">Готов начать свой путь?</h2>
+            <p class="text-sm text-gray-400 mb-6 max-w-xl mx-auto leading-relaxed">
+                Присоединяйся к образовательной среде Mentoria Hub для достижения академических целей, подготовки к олимпиадам и расширения портфолио.
             </p>
             {% if not user.is_authenticated %}
-                <a href="{% url 'register' %}" class="bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-bold hover:bg-gray-100 transition inline-block">
-                    Зарегистрироваться Бесплатно
+                <a href="{% url 'register' %}" class="btn-stepik text-white px-6 py-2.5 rounded-md text-sm font-medium transition inline-block">
+                    Зарегистрироваться бесплатно
                 </a>
             {% else %}
-                <a href="{% url 'dashboard' %}" class="bg-white text-purple-600 px-8 py-4 rounded-lg text-lg font-bold hover:bg-gray-100 transition inline-block">
-                    Перейти на Дашборд
+                <a href="{% url 'dashboard' %}" class="btn-stepik text-white px-6 py-2.5 rounded-md text-sm font-medium transition inline-block">
+                    Перейти в дашборд
                 </a>
             {% endif %}
         </div>

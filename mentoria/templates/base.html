@@ -8,90 +8,83 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: #f8fafc;
+            background-color: #f8f9fa;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
         }
-        .gradient-text {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        /* Фирменный зеленый цвет со скриншота */
+        .btn-stepik {
+            background-color: #4caf50;
+            color: #fff;
+            transition: background-color 0.15s ease;
+        }
+        .btn-stepik:hover {
+            background-color: #45a049;
+        }
+        /* Стили для вкладок и активных элементов */
+        .active-tab {
+            color: #4caf50;
+            border-bottom: 2px solid #4caf50;
         }
         .card-hover {
-            transition: transform 0.18s ease, box-shadow 0.18s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .card-hover:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px -8px rgba(16, 24, 40, 0.08);
-        }
-        .btn-gradient {
-            background-color: #6b5ddf;
-            color: #fff;
-            transition: box-shadow 0.18s ease, transform 0.18s ease;
-        }
-        .btn-gradient:hover {
-            transform: none;
-            box-shadow: 0 8px 24px -8px rgba(107, 93, 223, 0.18);
-        }
-        .progress-bar {
-            background-color: #6b5ddf;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.05);
         }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-    <body class="bg-gray-100 text-gray-800">
-    <!-- HEADER -->
-    <header class="bg-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<body class="text-gray-900 flex flex-col min-h-screen">
+
+    <header class="bg-[#1b1b1d] text-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center">
+                
+                <div class="flex items-center space-x-6">
                     <a href="{% url 'home' %}" class="flex items-center space-x-2">
-                        <div class="btn-gradient text-white w-10 h-10 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-graduation-cap"></i>
+                        <div class="bg-white text-[#1b1b1d] w-8 h-8 rounded-md flex items-center justify-center font-black text-lg">
+                            M
                         </div>
-                        <span class="text-xl font-bold gradient-text">Mentoria Hub</span>
+                        <span class="text-lg font-bold tracking-tight hidden sm:block">Mentoria Hub</span>
                     </a>
+                    
+                    <nav id="nav-menu" class="hidden md:flex space-x-6 text-sm font-medium">
+                        <a href="{% url 'course_list' %}" class="text-gray-300 hover:text-white transition">Каталог</a>
+                        <a href="{% url 'opportunity_list' %}" class="text-gray-300 hover:text-white transition">Преподавание</a>
+                        <a href="{% url 'news_list' %}" class="text-gray-300 hover:text-white transition">Новости</a>
+                    </nav>
                 </div>
 
-                <!-- Mobile menu button -->
-                <div class="md:hidden">
-                    <button id="nav-toggle" aria-label="Toggle navigation" class="p-2 rounded-md text-gray-600 hover:bg-gray-100">
-                        <i class="fas fa-bars"></i>
+                <div class="hidden lg:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" placeholder="Поиск курсов..." class="w-full bg-[#2d2d30] text-sm text-white placeholder-gray-400 pl-10 pr-4 py-1.5 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 text-sm font-medium">
+                    <button class="text-gray-300 hover:text-white transition hidden sm:flex items-center space-x-1">
+                        <i class="fas fa-globe text-xs"></i> <span>Русский</span>
                     </button>
-                </div>
+                    
+                    <a href="#" class="text-gray-300 hover:text-white transition px-2">
+                        <i class="far fa-heart text-lg"></i>
+                    </a>
 
-                <!-- Navigation -->
-                <nav id="nav-menu" class="hidden md:flex space-x-6">
-                    <a href="{% url 'home' %}" class="text-gray-600 hover:text-gray-900 transition">Главная</a>
-                    <a href="{% url 'course_list' %}" class="text-gray-600 hover:text-gray-900 transition">Курсы</a>
-                    <a href="{% url 'opportunity_list' %}" class="text-gray-600 hover:text-gray-900 transition">Возможности</a>
-                    <a href="{% url 'news_list' %}" class="text-gray-600 hover:text-gray-900 transition">Новости</a>
-                </nav>
+                    <div class="h-4 w-[1px] bg-gray-700 hidden sm:block"></div>
 
-                <!-- User Menu -->
-                <div class="flex items-center space-x-4">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard' %}" class="hidden sm:inline-block text-gray-600 hover:text-gray-900 transition">
-                            <i class="fas fa-chart-line"></i> Дашборд
+                        <span class="text-gray-300 hidden sm:inline">{{ user.username }}</span>
+                        <a href="{% url 'logout' %}" class="border border-gray-600 text-gray-200 hover:bg-gray-800 px-4 py-1.5 rounded-md transition">
+                            Выйти
                         </a>
-                        {% if user.is_superuser %}
-                            <a href="/admin/" class="hidden sm:inline-block text-red-600 hover:text-red-900 transition font-semibold">
-                                <i class="fas fa-cog"></i> Admin
-                            </a>
-                        {% endif %}
-                        <div class="flex items-center space-x-2">
-                            <span class="text-sm text-gray-600">{{ user.username }}</span>
-                            <a href="{% url 'logout' %}" class="btn-gradient text-white px-4 py-2 rounded-lg text-sm transition shadow-sm">
-                                Выход
-                            </a>
-                        </div>
                     {% else %}
-                        <a href="{% url 'login' %}" class="text-gray-600 hover:text-gray-900 transition">
-                            Вход
-                        </a>
-                        <a href="{% url 'register' %}" class="btn-gradient text-white px-4 py-2 rounded-lg text-sm transition shadow-sm">
-                            Регистрация
+                        <a href="{% url 'login' %}" class="border border-gray-600 text-gray-200 hover:bg-gray-800 px-4 py-1.5 rounded-md transition">
+                            Войти
                         </a>
                     {% endif %}
                 </div>
@@ -99,16 +92,16 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <main class="min-h-screen py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="flex-grow py-6">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+            
             {% if messages %}
                 <div id="messages" class="space-y-3 mb-6">
                     {% for message in messages %}
                         <div class="flex items-start bg-white border border-gray-200 shadow-sm rounded-lg p-4">
-                            <div class="mr-3 text-green-500 mt-1"><i class="fas fa-check-circle"></i></div>
+                            <div class="mr-3 text-green-500 mt-0.5"><i class="fas fa-check-circle"></i></div>
                             <div class="flex-1 text-sm text-gray-800">{{ message }}</div>
-                            <button class="text-gray-400 hover:text-gray-600 ml-4" onclick="this.parentElement.remove()" aria-label="Dismiss message">
+                            <button class="text-gray-400 hover:text-gray-600 ml-4" onclick="this.parentElement.remove()">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -116,62 +109,53 @@
                 </div>
             {% endif %}
 
-            <div class="bg-white rounded-xl shadow-md p-6">
-                {% block content %}{% endblock %}
-            </div>
+            {% block content %}
+            {% endblock %}
+            
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-white text-gray-700 py-12 mt-16 border-t">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+    <footer class="bg-white border-t border-gray-200 text-gray-600 py-10 mt-auto">
+        <div class="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h3 class="text-lg font-bold mb-4">Mentoria Hub</h3>
-                    <p class="text-gray-400 text-sm">Платформа для развития и поиска возможностей для школьников.</p>
+                    <h3 class="text-sm font-bold text-gray-900 mb-3">Mentoria Hub</h3>
+                    <p class="text-gray-500 text-xs leading-relaxed">Образовательная платформа для развития навыков и поиска траекторий поступления.</p>
                 </div>
                 <div>
-                    <h4 class="text-sm font-semibold mb-4">Платформа</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="{% url 'course_list' %}" class="hover:text-white transition">Курсы</a></li>
-                        <li><a href="{% url 'opportunity_list' %}" class="hover:text-white transition">Возможности</a></li>
-                        <li><a href="{% url 'news_list' %}" class="hover:text-white transition">Новости</a></li>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Платформа</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'course_list' %}" class="hover:text-gray-900 transition">Каталог курсов</a></li>
+                        <li><a href="{% url 'opportunity_list' %}" class="hover:text-gray-900 transition">Олимпиады</a></li>
+                        <li><a href="{% url 'news_list' %}" class="hover:text-gray-900 transition">Вебинары</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-sm font-semibold mb-4">Компания</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">О нас</a></li>
-                        <li><a href="#" class="hover:text-white transition">Контакты</a></li>
-                        <li><a href="#" class="hover:text-white transition">Вакансии</a></li>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">О нас</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-gray-900 transition">О проекте</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition">Команда</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition">Контакты</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-sm font-semibold mb-4">Контакты</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li>Email: info@mentoria.hub</li>
-                        <li>Телефон: +7 (999) 999-99-99</li>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Поддержка</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-gray-900 transition">Справочный центр</a></li>
+                        <li><a href="#" class="hover:text-gray-900 transition">Условия использования</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-gray-100 pt-8 text-center text-gray-500 text-sm">
-                <p>&copy; 2026 Mentoria Hub - LumenLabs. Все права защищены.</p>
+            <div class="border-t border-gray-100 pt-6 text-center text-xs text-gray-400 flex flex-col sm:flex-row justify-between items-center">
+                <p>&copy; 2026 Mentoria Hub. Все права защищены.</p>
+                <div class="flex space-x-4 mt-2 sm:mt-0">
+                    <a href="#" class="hover:text-gray-600"><i class="fab fa-vk text-lg"></i></a>
+                    <a href="#" class="hover:text-gray-600"><i class="fab fa-telegram text-lg"></i></a>
+                </div>
             </div>
         </div>
     </footer>
 
     {% block extra_js %}{% endblock %}
-    <script>
-        // Mobile nav toggle
-        document.addEventListener('click', function (e) {
-            const toggle = document.getElementById('nav-toggle');
-            const menu = document.getElementById('nav-menu');
-            if (!toggle || !menu) return;
-
-            if (e.target.closest('#nav-toggle')) {
-                menu.classList.toggle('hidden');
-            }
-        });
-    </script>
 </body>
 </html>

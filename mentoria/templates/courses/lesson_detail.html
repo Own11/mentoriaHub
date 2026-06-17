@@ -4,189 +4,169 @@
 {% block title %}{{ lesson.title }} - Mentoria Hub{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-        <!-- Breadcrumb -->
-        <div class="mb-8">
-            <nav class="flex items-center space-x-2 text-sm">
-                <a href="{% url 'course_detail' course.slug %}" class="text-purple-600 hover:text-purple-700">
-                    {{ course.title }}
-                </a>
-                <span class="text-gray-400">/</span>
-                <span class="text-gray-600">{{ lesson.title }}</span>
-            </nav>
-        </div>
+<div class="py-6">
+    <div class="mb-6">
+        <nav class="flex items-center space-x-2 text-xs font-medium text-gray-400">
+            <a href="{% url 'course_list' %}" class="hover:text-[#4caf50] transition-colors">Курсы</a>
+            <span class="text-gray-300">/</span>
+            <a href="{% url 'course_detail' course.slug %}" class="hover:text-[#4caf50] transition-colors">
+                {{ course.title }}
+            </a>
+            <span class="text-gray-300">/</span>
+            <span class="text-gray-600 font-bold">{{ lesson.title }}</span>
+        </nav>
+    </div>
 
-        <!-- Main Content -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Lesson Content -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden">
-                    <!-- Video Section -->
-                    {% if lesson.video_url %}
-                        <div class="aspect-video bg-black relative">
-                            <iframe
-                                width="100%"
-                                height="100%"
-                                src="{{ lesson.video_url }}"
-                                title="{{ lesson.title }}"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                            ></iframe>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-6">
+            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                {% if lesson.video_url %}
+                    <div class="aspect-video bg-black relative border-b border-gray-100">
+                        <iframe
+                            width="100%"
+                            height="100%"
+                            src="{{ lesson.video_url }}"
+                            title="{{ lesson.title }}"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                        ></iframe>
+                    </div>
+                {% else %}
+                    <div class="aspect-video bg-gray-50 flex items-center justify-center border-b border-gray-100 text-gray-300">
+                        <i class="fas fa-video text-5xl"></i>
+                    </div>
+                {% endif %}
+
+                <div class="p-6 sm:p-8">
+                    <div class="mb-6">
+                        <p class="text-[11px] text-[#4caf50] font-bold uppercase tracking-wider mb-1.5">
+                            Урок {{ lesson_number }} из {{ total_lessons }}
+                        </p>
+                        <h1 class="text-2xl font-bold text-gray-900 tracking-tight">{{ lesson.title }}</h1>
+                        <p class="text-sm text-gray-500 mt-1.5 leading-relaxed">{{ lesson.description }}</p>
+                    </div>
+
+                    <div class="mb-6 pb-6 border-b border-gray-100">
+                        <div class="flex justify-between items-center mb-2 text-xs">
+                            <span class="font-bold text-gray-700">Прогресс по модулю</span>
+                            <span class="font-bold text-gray-500">{{ lesson_number }} / {{ total_lessons }}</span>
                         </div>
-                    {% else %}
-                        <div class="aspect-video bg-gradient-to-br from-indigo-400 to-blue-500 flex items-center justify-center">
-                            <i class="fas fa-video text-white text-6xl opacity-50"></i>
+                        <div class="w-full bg-gray-200 rounded-full h-1.5">
+                            <div
+                                class="bg-[#4caf50] h-1.5 rounded-full transition-all duration-300"
+                                style="width: {% widthratio lesson_number total_lessons 100 %}%"
+                            ></div>
+                        </div>
+                    </div>
+
+                    <div class="prose max-w-none mb-8">
+                        {% if lesson.content %}
+                            <div class="text-gray-600 text-sm sm:text-base whitespace-pre-wrap leading-relaxed">
+                                {{ lesson.content }}
+                            </div>
+                        {% else %}
+                            <p class="text-gray-400 text-xs">Посмотрите лекционный видеоматериал выше для изучения темы.</p>
+                        {% endif %}
+                    </div>
+
+                    {% if lesson.skills.all %}
+                        <div class="mb-6 pb-6 border-b border-gray-100">
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2.5">Осваиваемые навыки:</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                {% for skill in lesson.skills.all %}
+                                    <span class="px-2.5 py-1 bg-gray-100 text-gray-700 border border-gray-200 rounded text-xs font-medium">
+                                        {{ skill.name }}
+                                    </span>
+                                {% endfor %}
+                            </div>
                         </div>
                     {% endif %}
 
-                    <!-- Content -->
-                    <div class="p-8">
-                        <!-- Header -->
-                        <div class="mb-8">
-                            <p class="text-sm text-purple-600 font-semibold mb-2">
-                                Урок {{ lesson_number }} из {{ total_lessons }}
-                            </p>
-                            <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ lesson.title }}</h1>
-                            <p class="text-lg text-gray-600">{{ lesson.description }}</p>
+                    {% if not is_completed %}
+                        <form method="post" action="{% url 'complete_lesson' lesson.id %}" class="mt-4">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-stepik text-white w-full py-2.5 rounded-md text-sm font-medium transition shadow-sm flex items-center justify-center">
+                                Отметить шаг как пройденный
+                            </button>
+                        </form>
+                    {% else %}
+                        <div class="mt-4 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-md text-xs font-medium text-center">
+                            <i class="fas fa-check-circle mr-1.5 text-emerald-600"></i> Вы успешно прошли этот учебный шаг!
                         </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
-                        <!-- Progress Bar -->
-                        <div class="mb-8 pb-8 border-b border-gray-200">
-                            <div class="flex justify-between items-center mb-2">
-                                <p class="text-sm font-semibold text-gray-700">Прогресс урока</p>
-                                <p class="text-sm font-semibold text-purple-600">{{ lesson_number }}/{{ total_lessons }}</p>
-                            </div>
-                            <div class="bg-gray-200 rounded-full h-2">
-                                <div
-                                    class="progress-bar h-full rounded-full transition-all duration-300"
-                                    style="width: {% widthratio lesson_number total_lessons 100 %}%"
-                                ></div>
-                            </div>
-                        </div>
+        <div class="space-y-6">
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
+                <h3 class="text-sm font-bold text-gray-900 tracking-tight mb-4">
+                    <i class="fas fa-info-circle text-gray-400 mr-2"></i>Статус шага
+                </h3>
 
-                        <!-- Lesson Content -->
-                        <div class="prose max-w-none mb-8">
-                            {% if lesson.content %}
-                                <div class="text-gray-700 whitespace-pre-wrap">{{ lesson.content }}</div>
-                            {% else %}
-                                <p class="text-gray-600">Посмотрите видео выше и изучите материал урока.</p>
-                            {% endif %}
-                        </div>
+                <div class="space-y-3.5 text-xs">
+                    <div class="flex justify-between pb-2 border-b border-gray-50">
+                        <span class="text-gray-400">Порядковый номер</span>
+                        <span class="font-bold text-gray-800">{{ lesson_number }} из {{ total_lessons }}</span>
+                    </div>
 
-                        <!-- Skills -->
-                        {% if lesson.skills.all %}
-                            <div class="mb-8 pb-8 border-b border-gray-200">
-                                <p class="text-sm font-semibold text-gray-900 mb-3">Навыки:</p>
-                                <div class="flex flex-wrap gap-2">
-                                    {% for skill in lesson.skills.all %}
-                                        <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold">
-                                            {{ skill.name }}
-                                        </span>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        <!-- Complete Button -->
-                        {% if not is_completed %}
-                            <form method="post" action="{% url 'complete_lesson' lesson.id %}" class="mb-8">
-                                {% csrf_token %}
-                                <button type="submit" class="btn-gradient text-white w-full py-4 rounded-lg font-bold text-lg transition flex items-center justify-center">
-                                    <i class="fas fa-check mr-2"></i>Отметить как Завершённый
-                                </button>
-                            </form>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400">Текущее состояние</span>
+                        {% if is_completed %}
+                            <span class="font-bold text-emerald-600 flex items-center">
+                                <i class="fas fa-check text-[10px] mr-1"></i> Пройден
+                            </span>
                         {% else %}
-                            <div class="mb-8 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg text-center">
-                                <i class="fas fa-check-circle mr-2"></i>Вы завершили этот урок!
-                            </div>
+                            <span class="font-bold text-amber-500 flex items-center">
+                                <i class="far fa-clock text-[10px] mr-1"></i> Изучается
+                            </span>
                         {% endif %}
                     </div>
                 </div>
             </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-6">
-                <!-- Lesson Info Card -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">
-                        <i class="fas fa-info-circle text-purple-600 mr-2"></i>Информация
-                    </h3>
+            <div class="bg-white rounded-xl border border-gray-200 p-5">
+                <h3 class="text-sm font-bold text-gray-900 tracking-tight mb-4">
+                    <i class="fas fa-map-signs text-gray-400 mr-2"></i>Переходы
+                </h3>
 
-                    <div class="space-y-4 text-sm">
-                        <div>
-                            <p class="text-gray-600">Номер урока</p>
-                            <p class="font-bold text-gray-900">{{ lesson_number }} / {{ total_lessons }}</p>
-                        </div>
+                <div class="space-y-2.5 text-xs">
+                    {% if previous_lesson %}
+                        <a href="{% url 'lesson_detail' previous_lesson.id %}" class="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">← Предыдущий шаг</p>
+                            <p class="font-bold text-gray-800 line-clamp-1 mt-0.5">{{ previous_lesson.title }}</p>
+                        </a>
+                    {% endif %}
 
-                        <div>
-                            <p class="text-gray-600">Статус</p>
-                            {% if is_completed %}
-                                <p class="font-bold text-green-600">
-                                    <i class="fas fa-check mr-1"></i>Завершён
-                                </p>
-                            {% else %}
-                                <p class="font-bold text-purple-600">
-                                    <i class="fas fa-play mr-1"></i>В прогрессе
-                                </p>
-                            {% endif %}
-                        </div>
-
-                        {% if lesson.skills.all %}
-                            <div>
-                                <p class="text-gray-600">Навыки</p>
-                                <p class="font-bold text-gray-900">{{ lesson.skills.count }} навыков</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Navigation -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <h3 class="text-lg font-bold text-gray-900 mb-4">
-                        <i class="fas fa-arrow-alt-circle-right text-purple-600 mr-2"></i>Навигация
-                    </h3>
-
-                    <div class="space-y-3">
-                        {% if previous_lesson %}
-                            <a href="{% url 'lesson_detail' previous_lesson.id %}" class="block p-3 border border-gray-200 rounded-lg hover:bg-purple-50 transition">
-                                <p class="text-xs text-gray-600">Предыдущий урок</p>
-                                <p class="font-semibold text-gray-900">{{ previous_lesson.title }}</p>
-                            </a>
-                        {% endif %}
-
-                        {% if next_lesson %}
-                            <a href="{% url 'lesson_detail' next_lesson.id %}" class="block p-3 border border-gray-200 rounded-lg hover:bg-purple-50 transition">
-                                <p class="text-xs text-gray-600">Следующий урок</p>
-                                <p class="font-semibold text-gray-900">{{ next_lesson.title }}</p>
-                            </a>
-                        {% else %}
-                            <a href="{% url 'course_detail' course.slug %}" class="block p-3 border border-purple-200 rounded-lg hover:bg-purple-50 transition">
-                                <p class="text-xs text-purple-600">Завершить курс</p>
-                                <p class="font-semibold text-gray-900">Вернуться к курсу</p>
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- XP Info -->
-                <div class="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl shadow-lg p-6 text-white">
-                    <h3 class="text-lg font-bold mb-4">
-                        <i class="fas fa-star mr-2"></i>Награда
-                    </h3>
-
-                    {% if not is_completed %}
-                        <p class="text-purple-100 mb-3">За завершение этого урока вы получите:</p>
-                        <div class="text-3xl font-bold">+20 XP</div>
-                        <p class="text-purple-100 text-sm mt-2">и увеличите свою серию</p>
+                    {% if next_lesson %}
+                        <a href="{% url 'lesson_detail' next_lesson.id %}" class="block p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                            <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Следующий шаг →</p>
+                            <p class="font-bold text-gray-800 line-clamp-1 mt-0.5">{{ next_lesson.title }}</p>
+                        </a>
                     {% else %}
-                        <div class="text-center">
-                            <p class="text-purple-100 text-sm mb-2">Вы уже завершили этот урок</p>
-                            <p class="text-2xl font-bold">+20 XP</p>
-                        </div>
+                        <a href="{% url 'course_detail' course.slug %}" class="block p-3 border border-emerald-200 bg-emerald-50/20 rounded-lg hover:bg-emerald-50/50 transition-colors">
+                            <p class="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider">Программа курса</p>
+                            <p class="font-bold text-gray-800 mt-0.5">Вернуться к содержанию</p>
+                        </a>
                     {% endif %}
                 </div>
+            </div>
+
+            <div class="bg-[#1b1b1d] rounded-xl p-5 text-white">
+                <h3 class="text-sm font-bold tracking-tight mb-3">
+                    <i class="fas fa-star text-amber-400 mr-1.5 text-xs"></i>Баллы за урок
+                </h3>
+
+                {% if not is_completed %}
+                    <p class="text-xs text-gray-400 leading-relaxed mb-3">За успешное завершение этого шага на ваш профиль будет начислено:</p>
+                    <div class="text-2xl font-black tracking-tight text-[#4caf50]">+20 XP</div>
+                {% else %}
+                    <div class="flex items-center justify-between bg-white/5 p-2 rounded border border-white/10 text-xs">
+                        <span class="text-gray-400">Баллы получены</span>
+                        <span class="font-bold text-[#4caf50]">+20 XP</span>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

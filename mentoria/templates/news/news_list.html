@@ -3,78 +3,76 @@
 {% block title %}Новости - Mentoria Hub{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Все Новости</h1>
-            <p class="text-xl text-gray-600">Будьте в курсе всех обновлений и новостей Mentoria Hub</p>
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Все новости</h1>
+    <p class="text-sm text-gray-500 mt-1">Будьте в курсе всех обновлений и новостей проекта Mentoria Hub</p>
+</div>
+
+<div class="mb-8 max-w-2xl">
+    <form method="get" class="flex gap-2">
+        <div class="relative flex-1">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="fas fa-search text-sm"></i>
+            </span>
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Поиск новостей..."
+                class="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:border-[#4caf50] focus:ring-1 focus:ring-[#4caf50]"
+            >
         </div>
+        <button type="submit" class="btn-stepik text-white text-sm font-medium px-5 py-2 rounded-md transition shadow-sm">
+            Найти
+        </button>
+    </form>
+</div>
 
-        <!-- Search Bar -->
-        <div class="mb-8">
-            <form method="get" class="flex gap-2">
-                <input
-                    type="text"
-                    name="search"
-                    value="{{ search }}"
-                    placeholder="Поиск новостей..."
-                    class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                >
-                <button type="submit" class="btn-gradient text-white px-6 py-3 rounded-lg font-semibold transition">
-                    <i class="fas fa-search mr-2"></i>Поиск
-                </button>
-            </form>
-        </div>
-
-        <!-- News Grid -->
-        {% if news %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {% for item in news %}
-                    <div class="card-hover bg-white rounded-xl overflow-hidden shadow-lg">
-                        <!-- Image -->
-                        {% if item.image %}
-                            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-48 object-cover">
-                        {% else %}
-                            <div class="w-full h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
-                                <i class="fas fa-newspaper text-white text-4xl opacity-50"></i>
-                            </div>
-                        {% endif %}
-
-                        <!-- Content -->
-                        <div class="p-6">
-                            <!-- Date -->
-                            <p class="text-sm text-purple-600 font-semibold mb-2">
-                                <i class="far fa-calendar mr-2"></i>{{ item.created_at|date:"d MMMM Y" }}
-                            </p>
-
-                            <!-- Title -->
-                            <h3 class="text-xl font-bold text-gray-900 mb-3">{{ item.title }}</h3>
-
-                            <!-- Preview -->
-                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ item.text }}</p>
-
-                            <!-- Read More Link -->
-                            <a href="{% url 'news_detail' item.id %}" class="text-purple-600 font-semibold hover:text-purple-700 transition inline-block">
-                                Читать полностью <i class="fas fa-arrow-right ml-2"></i>
-                            </a>
+{% if news %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for item in news %}
+            <div class="card-hover bg-white rounded-xl border border-gray-200 overflow-hidden flex flex-col justify-between">
+                <div>
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.title }}" class="w-full h-44 object-cover">
+                    {% else %}
+                        <div class="w-full h-44 bg-gray-50 flex items-center justify-center text-gray-300 border-b border-gray-100">
+                            <i class="far fa-newspaper text-4xl"></i>
                         </div>
+                    {% endif %}
+
+                    <div class="p-5">
+                        <p class="text-xs text-gray-400 font-medium mb-2">
+                            <i class="far fa-calendar mr-1.5"></i>{{ item.created_at|date:"d.m.Y" }}
+                        </p>
+
+                        <h3 class="text-base font-bold text-gray-900 mb-2 line-clamp-2 hover:text-[#4caf50] transition-colors">
+                            <a href="{% url 'news_detail' item.id %}">{{ item.title }}</a>
+                        </h3>
+
+                        <p class="text-gray-500 text-xs mb-4 line-clamp-3 leading-relaxed">{{ item.text }}</p>
                     </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div class="text-center py-20">
-                <div class="text-gray-400 text-4xl mb-4">
-                    <i class="fas fa-search"></i>
                 </div>
-                <p class="text-gray-600 text-xl">Новостей не найдено</p>
-                {% if search %}
-                    <a href="{% url 'news_list' %}" class="text-purple-600 font-semibold hover:text-purple-700 mt-4 inline-block">
-                        Очистить поиск <i class="fas fa-times ml-2"></i>
+
+                <div class="px-5 pb-5 pt-1">
+                    <a href="{% url 'news_detail' item.id %}" class="text-xs font-bold text-[#4caf50] hover:text-[#45a049] transition-colors inline-flex items-center">
+                        Читать полностью <i class="fas fa-chevron-right ml-1 text-[8px]"></i>
                     </a>
-                {% endif %}
+                </div>
             </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-16 bg-white rounded-xl border border-gray-200">
+        <div class="text-gray-300 text-3xl mb-3">
+            <i class="fas fa-search"></i>
+        </div>
+        <p class="text-gray-500 text-sm font-medium">Новостей не найдено</p>
+        {% if search %}
+            <a href="{% url 'news_list' %}" class="text-xs font-bold text-[#4caf50] hover:text-[#45a049] transition-colors mt-2 inline-block">
+                Очистить поиск <i class="fas fa-times ml-1 text-[10px]"></i>
+            </a>
         {% endif %}
     </div>
-</div>
+{% endif %}
 {% endblock %}
