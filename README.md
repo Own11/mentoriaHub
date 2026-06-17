@@ -56,4 +56,4 @@ Frontend: HTML5, Tailwind CSS, JavaScript, Font Awesome
 
 ## Безопасность
 
-Реализована CSRF-защита, хеширование паролей, защита от SQL-инъекций.
+Реализована CSRF-защита, хеширование паролей, защита от SQL-инъекций.# mentoriaHub
