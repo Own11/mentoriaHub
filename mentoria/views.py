@@ -27,8 +27,10 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
+            # Метод form.save() создает пользователя и автоматически 
+            # вызывает ваш сигнал post_save, который создает UserProfile.
             user = form.save()
-            UserProfile.objects.create(user=user)
+            
             login(request, user)
             return redirect('interests')
     else:
