@@ -119,6 +119,18 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Автоматически проверяем, запущено ли приложение на Vercel
+IS_VERCEL = "VERCEL" in os.environ
+
+MEDIA_URL = "/media/"
+
+if IS_VERCEL:
+    # На Vercel пишем во временную папку /tmp
+    MEDIA_ROOT = "/tmp/media"
+else:
+    # На локальной машине сохраняем как обычно в корень проекта
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
